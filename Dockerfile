@@ -1,10 +1,12 @@
 # 1 - Compiler l'application React
 
-FROM node:22alpha-alpine AS build
+FROM node:22-alpine AS build
 
 WORKDIR /app
 
 COPY package*.json ./
+
+RUN npm install
 
 COPY . .
 
@@ -14,7 +16,7 @@ RUN npm run build
 
 FROM nginx:stable-alpine
 
-COPY --from=build /app/dist /usr/share/nginx/index.html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
